@@ -2,8 +2,7 @@
 #include<stdlib.h>
 int main ()
 {
-    printf("Bonjour toi");
-    printf ("salut");
+    printf("");
     return 0;
 }
 
