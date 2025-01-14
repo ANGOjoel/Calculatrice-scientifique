@@ -1,0 +1,38 @@
+#include <stdio.h>
+
+void calculer() {
+    double num1, num2;
+    char operateur;
+
+    // Demander à l'utilisateur de saisir une opération
+    printf("Entrez une opération (par exemple : 3 + 4) : ");
+    scanf("%lf %c %lf", &num1, &operateur, &num2);
+
+    // Effectuer le calcul en fonction de l'opérateur
+    switch(operateur) {
+        case '+':
+            printf("Résultat: %.2lf\n", num1 + num2);
+            break;
+        case '-':
+            printf("Résultat: %.2lf\n", num1 - num2);
+            break;
+        case '*':
+            printf("Résultat: %.2lf\n", num1 * num2);
+            break;
+        case '/':
+            if (num2 != 0) {
+                printf("Résultat: %.2lf\n", num1 / num2);
+            } else {
+                printf("Erreur : Division par zéro.\n");
+            }
+            break;
+        default:
+            printf("Opérateur invalide.\n");
+            break;
+    }
+}
+
+int main() {
+    calculer();
+    return 0;
+}
