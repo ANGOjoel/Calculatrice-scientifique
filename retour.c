@@ -4,6 +4,41 @@
 #include <math.h>
 #include <ctype.h>
 #define M_PI 3.14159265358979323846
+void expressionvalide(char *entre)
+{
+    int i = 0;
+    char *functions[] = {"sin", "cos", "tan", "sqrt", "log"};
+    int num_functions = 5; // Nombre de fonctions mathématiques
+
+    while (entre[i] != '\0')
+    {
+        // Vérifier si c'est une lettre
+        if (isalpha(entre[i]))
+        {
+            // Chercher si le mot à partir de la position actuelle est une fonction valide
+            int valid_function = 0;
+            for (int j = 0; j < num_functions; j++)
+            {
+                int l = strlen(functions[j]);
+                // Si la fonction est trouvée à cette position, passer à la fin de cette fonction
+                if (strncmp(&entre[i], functions[j], l) == 0)
+                {
+                    i += l - 1;  // Avancer à la fin du mot de la fonction
+                    valid_function = 1;
+                    break;
+                }
+            }
+
+            // Si ce n'est pas une fonction valide, l'expression est invalide
+            if (!valid_function)
+            {
+                printf("Expression invalide\n");
+                exit(0);
+            }
+        }
+        i++;
+    }
+}
 
 // Déclaration de la fonction evaluerExpression
 double evaluerExpression(char *calcul, int *index);
@@ -206,6 +241,7 @@ int main()
 
     fgets(calcul, sizeof(calcul), fichier);
     printf("Expression lue depuis le fichier : %s\n", calcul);
+    expressionvalide(calcul);
 
     int index = 0;
     double resultat = evaluerExpression(calcul, &index);
