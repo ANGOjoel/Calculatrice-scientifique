@@ -3,276 +3,199 @@
 #include <string.h>
 #include <math.h>
 #include <ctype.h>
-#define MAX 100
+#define M_PI 3.14159265358979323846
 
-int verifiexpression(char calcul[1000]) 
+// Déclaration de la fonction evaluerExpression
+double evaluerExpression(char *calcul, int *index);
+
+// Fonction pour gérer les fonctions trigonométriques comme sin, cos, tan
+double fonction(char *expression, int *index, char *nomfonction) 
 {
-    int parenthese = 0;  // Compteur pour vérifier les parenthèses
-    int verifieoperateur = 1;  // Permet de vérifier qu'un opérateur ne se trouve pas en dernier
-
-    for (int i = 0; i < strlen(calcul); i++)
-     {
-        // Si c'est un caractère valide (chiffre, opérateur, ou fonction trigonométrique)
-        if (isdigit(calcul[i]) || calcul[i] == '.' || 
-            calcul[i] == '(' || calcul[i] == ')' ||
-            calcul[i] == '+' || calcul[i] == '-' || 
-            calcul[i] == '*' || calcul[i] == '/') 
-            {
-            
-            // Vérification qu'un opérateur ne suit pas directement un autre opérateur
-            if ((calcul[i] == '+' || calcul[i] == '-' || calcul[i] == '*' || calcul[i] == '/') && verifieoperateur) 
-            {
-                return 0; // Syntaxe invalide (deux opérateurs successifs)
-            }
-
-            // Vérification des parenthèses
-            if (calcul[i] == '(') 
-            {
-                parenthese++;
-            } else if (calcul[i] == ')') 
-            {
-                parenthese--;
-                if (parenthese < 0) 
-                {
-                    return 0; // si il y a une parenthèse qui est fermée sans être ouverte
-                }
-            }
-
-            // Si un chiffre est suivi d'un opérateur, c'est ok
-            if (isdigit(calcul[i]))
-            {
-                verifieoperateur = 0;
-            } else if (calcul[i] == '(') 
-            {
-                verifieoperateur = 1;
-            } else {
-                verifieoperateur = 0;
-            }
-        } else if (!isalpha(calcul[i])) 
+    int i = *index;
+    char tabfunction[100];
+    int s = 0;
+    
+    while (expression[i] != '(' && expression[i] != '\0') 
+    {
+        i++;
+    }
+    
+    if (expression[i] == '(') 
+    {
+        i++;  // Passer le '('
+        while (expression[i] != ')' && expression[i] != '\0') 
         {
-            // Si le caractère est ni un chiffre ni un opérateur ni une parenthèse, c'est une erreur
-            return 0; // Caractère invalide
+            tabfunction[s] = expression[i];
+            s++;
+            i++;
+        }
+        
+        tabfunction[s] = '\0'; // Terminer la chaîne
+        double nombrefonction = atof(tabfunction);
+        *index = i; // Mettre à jour l'index après le calcul
+        
+        if (strcmp(nomfonction, "sin") == 0) 
+        {
+            return sin(nombrefonction * M_PI / 180);
+        } 
+        else if (strcmp(nomfonction, "cos") == 0) 
+        {
+            return cos(nombrefonction * M_PI / 180);
+        } 
+        else if (strcmp(nomfonction, "tan") == 0) 
+        {
+            return tan(nombrefonction * M_PI / 180);
+        } 
+        else if (strcmp(nomfonction, "sqrt") == 0) 
+        {
+            return sqrt(nombrefonction); // Fonction racine carrée
+        } 
+        else if (strcmp(nomfonction, "log") == 0) 
+        {
+            return log(nombrefonction); // Fonction logarithme
         }
     }
-
-    // Vérification que les parenthèses sont équilibrées
-    if (parenthese != 0) 
-    {
-        return 0; // Parenthèses non équilibrées
-    }
-
-    // Vérification que l'expression ne se termine pas par un opérateur
-    if (verifieoperateur) 
-    {
-        return 0; // Erreur si l'expression se termine par un opérateur
-    }
-
-    return 1;  // Expression valide
+    
+    return 0;
 }
 
-void printfnumber(char calcul[MAX]) 
+// Fonction récursive pour évaluer les expressions entre parenthèses
+double evaluerParenthese(char *calcul, int *index) 
 {
-    int a = 0, b = 0, k = 0;
-    char tab[MAX];
-    double number[MAX];
-    char operateur[MAX];
+    (*index)++;  // Passer le '('
+    double resultat = evaluerExpression(calcul, index);  // Évaluer l'expression à l'intérieur
+    (*index)++;  // Passer le ')'
+    return resultat;
+}
+
+// Fonction pour analyser et évaluer l'expression
+double evaluerExpression(char *calcul, int *index) 
+{
+    int a = 0, b = 0, k = 0, i = *index;
+    char tab[100];
+    double number[100];
+    char operateur[100];
     double c, d, result;
 
-    if (!verifiexpression(calcul)) 
+    while (calcul[i] != '\0') 
     {
-        printf("Erreur de syntaxe : Expression invalide.\n");
-        return;
-    }
-
-    // Parcourir chaque caractère dans l'expression
-    for (int i = 0; i < strlen(calcul); i++) 
-    {
-        if (calcul[i] == ' ' || calcul[i] == '\n') 
+        // Chercher les fonctions trigonométriques et mathématiques
+        if (strstr(calcul + i, "sin") == calcul + i) 
         {
-            continue;  // Ignorer les espaces et les nouvelles lignes
-        }
-
-        // Vérification si le caractère actuel fait partie d'un nombre
-        if (isdigit(calcul[i]) || calcul[i] == '.') 
+            double sin_result = fonction(calcul, &i, "sin");
+            number[b++] = sin_result;
+        } 
+        else if (strstr(calcul + i, "cos") == calcul + i) 
+        {
+            double cos_result = fonction(calcul, &i, "cos");
+            number[b++] = cos_result;
+        } 
+        else if (strstr(calcul + i, "tan") == calcul + i) 
+        {
+            double tan_result = fonction(calcul, &i, "tan");
+            number[b++] = tan_result;
+        } 
+        else if (strstr(calcul + i, "sqrt") == calcul + i) 
+        {
+            double sqrt_result = fonction(calcul, &i, "sqrt");
+            number[b++] = sqrt_result;
+        } 
+        else if (strstr(calcul + i, "log") == calcul + i) 
+        {
+            double log_result = fonction(calcul, &i, "log");
+            number[b++] = log_result;
+        } 
+        else if (isdigit(calcul[i]) || calcul[i] == '.') 
         {
             tab[a] = calcul[i];
             a++;
-        }
-        // Vérification si nous rencontrons une fonction trigonométrique ou mathématique
-        else if (strncmp(&calcul[i], "sin", 3) == 0 || strncmp(&calcul[i], "cos", 3) == 0 || 
-                 strncmp(&calcul[i], "tan", 3) == 0 || strncmp(&calcul[i], "log", 3) == 0 || 
-                 strncmp(&calcul[i], "sqrt", 4) == 0) 
+        } 
+        else if (calcul[i] == '(') 
         {
-            // Identifier la fonction trigonométrique ou mathématique
-            char func[5]; // Nous avons besoin d'un tableau de 5 caractères pour stocker le nom de la fonction (max 4 caractères)
-
-            // Extraire la fonction (3 ou 4 caractères selon le cas)
-            if (strncmp(&calcul[i], "sin", 3) == 0) {
-                strncpy(func, &calcul[i], 3);
-                func[3] = '\0';
-                i += 3;  // Passer après "sin"
-            }
-            else if (strncmp(&calcul[i], "cos", 3) == 0) {
-                strncpy(func, &calcul[i], 3);
-                func[3] = '\0';
-                i += 3;  // Passer après "cos"
-            }
-            else if (strncmp(&calcul[i], "tan", 3) == 0) {
-                strncpy(func, &calcul[i], 3);
-                func[3] = '\0';
-                i += 3;  // Passer après "tan"
-            }
-            else if (strncmp(&calcul[i], "log", 3) == 0) {
-                strncpy(func, &calcul[i], 3);
-                func[3] = '\0';
-                i += 3;  // Passer après "log"
-            }
-            else if (strncmp(&calcul[i], "sqrt", 4) == 0) {
-                strncpy(func, &calcul[i], 4);
-                func[4] = '\0';
-                i += 4;  // Passer après "sqrt"
-            }
-
-            // Vérification si la parenthèse ouvrante est présente
-            if (calcul[i] == '(') 
-            {
-                i++;  // Ignorer la parenthèse ouvrante
-                int start = i;
-                while (calcul[i] != ')' && i < strlen(calcul)) 
-                {
-                    i++;
-                }
-
-                char nombreentreparenthese[MAX];
-                strncpy(nombreentreparenthese, &calcul[start], i - start);
-                nombreentreparenthese[i - start] = '\0';
-                number[b] = atof(nombreentreparenthese); // Convertir l'argument en nombre
-
-                // Calcul de la fonction trigonométrique ou mathématique
-                if (strcmp(func, "sin") == 0) 
-                {
-                    number[b] = sin(number[b]);  // Calcul de sin
-                } 
-                else if (strcmp(func, "cos") == 0) 
-                {
-                    number[b] = cos(number[b]);  // Calcul de cos
-                }
-                else if (strcmp(func, "tan") == 0) 
-                {
-                    number[b] = tan(number[b]);  // Calcul de tan
-                }
-                else if (strcmp(func, "log") == 0) 
-                {
-                    if (number[b] <= 0) 
-                    {
-                        printf("Erreur : Logarithme d'un nombre <= 0\n");
-                        return;
-                    }
-                    number[b] = log(number[b]);  // Calcul du logarithme naturel
-                }
-                else if (strcmp(func, "sqrt") == 0) 
-                {
-                    if (number[b] < 0) 
-                    {
-                        printf("Erreur : Racine carrée d'un nombre négatif\n");
-                        return;
-                    }
-                    number[b] = sqrt(number[b]);  // Calcul de la racine carrée
-                }
-                b++; // Incrémenter l'indice des nombres
-            }
-        }
-        else // Si c'est un opérateur
+            // Si on trouve une parenthèse, on appelle evaluerParenthese
+            number[b++] = evaluerParenthese(calcul, &i);  // Appel récursif pour évaluer l'expression entre parenthèses
+        } 
+        else if (calcul[i] == '+' || calcul[i] == '-' || calcul[i] == '*' || calcul[i] == '/') 
         {
-            tab[a] = '\0';  // Terminer le nombre actuel
             if (a > 0) 
             {
-                number[b] = atof(tab);  // Convertir le tableau en nombre
-                b++;
+                tab[a] = '\0';
+                number[b++] = atof(tab);
+                a = 0;
             }
-            operateur[k] = calcul[i];  // Ajouter l'opérateur au tableau
-            k++;
-            a = 0;  // Réinitialiser l'indice pour le prochain nombre
+            operateur[k++] = calcul[i];
         }
+        i++;
     }
 
-    // Si le dernier caractère dans 'tab' est un nombre, on l'ajoute à la liste
-    if (a > 0)
+    // Finalisation des nombres restants
+    if (a > 0) 
     {
         tab[a] = '\0';
-        number[b] = atof(tab);
-        b++;
+        number[b++] = atof(tab);
     }
 
-    // Affichage des nombres extraits
-    printf("Les nombres extraits : ");
-    for (int i = 0; i < b; i++) 
-    {
-        printf("%.2lf ", number[i]);
-    }
-    printf("\n");
-
-    // Calcul des opérations avec priorité multiplication et division
+    // Calcul des opérations avec priorité aux * et /, en traitant d'abord les multiplications et divisions
     for (int i = 0; i < k; i++) 
+ {
+    if (operateur[i] == '*' || operateur[i] == '/') 
     {
-        if (operateur[i] == '*' || operateur[i] == '/') 
+        c = number[i];
+        d = number[i + 1];
+        double result;
+
+        if (operateur[i] == '*') 
         {
-            c = number[i];
-            d = number[i + 1];
-
-            if (operateur[i] == '*') 
-            {
-                result = c * d;
-            } 
-            else if (operateur[i] == '/') 
-            {
-                if (d == 0) 
-                {
-                    printf("Erreur de division par zéro\n");
-                    return;
-                } 
-                else 
-                {
-                    result = c / d;
-                }
-            }
-
-            number[i] = result;
-            for (int j = i + 1; j < b - 1; j++) 
-            {
-                number[j] = number[j + 1];  // Déplacer les nombres pour supprimer les éléments déjà utilisés
-            }
-            for (int j = i; j < k - 1; j++) 
-            {
-                operateur[j] = operateur[j + 1];  // Déplacer les opérateurs pour supprimer les éléments déjà utilisés
-            }
-            b--;
-            k--;
-            i--;
-        }
-    }
-
-    // Calcul des opérations d'addition et de soustraction
-    result = number[0];
-    for (int i = 0; i < k; i++) 
-    {
-        if (operateur[i] == '+') 
-        {
-            result += number[i + 1];
+            result = c * d;
         } 
-        else if (operateur[i] == '-') 
+        else if (operateur[i] == '/') 
         {
-            result -= number[i + 1];
+            result = c / d;
+        } 
+        else 
+        {
+            result = 0;
         }
-    }
 
-    // Affichage du résultat final
-    printf("Le résultat de l'expression est : %.2f\n", result);
+        number[i] = result;
+
+        // Décalage des éléments dans les tableaux pour supprimer l'élément traité
+        for (int j = i + 1; j < b - 1; j++) 
+        {
+            number[j] = number[j + 1];
+        }
+
+        for (int j = i; j < k - 1; j++) 
+        {
+            operateur[j] = operateur[j + 1];
+        }
+
+        b--;
+        k--;
+        i--; // Réévaluer la position actuelle après le décalage
+    }
 }
 
+// Calcul final pour les opérateurs + et - (addition et soustraction)
+result = number[0];
+for (int i = 0; i < k; i++) 
+{
+    if (operateur[i] == '+') 
+    {
+        result += number[i + 1];
+    } 
+    else if (operateur[i] == '-') 
+    {
+        result -= number[i + 1];
+    }
+}
+    return result;
+}
+
+// Fonction principale pour lire l'expression depuis un fichier et calculer le résultat
 int main() 
 {
-    char calcul[MAX];
+    char calcul[100];
     FILE *fichier = fopen("fichier.txt", "r");
 
     if (fichier == NULL) 
@@ -283,7 +206,10 @@ int main()
 
     fgets(calcul, sizeof(calcul), fichier);
     printf("Expression lue depuis le fichier : %s\n", calcul);
-    printfnumber(calcul);
+
+    int index = 0;
+    double resultat = evaluerExpression(calcul, &index);
+    printf("Le resultat de l'expression est : %.2f\n", resultat);
 
     fclose(fichier);
     return 0;
