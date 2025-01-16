@@ -26,7 +26,7 @@ Cosinus : cos(valeur)
 
 Tangente : tan(valeur)
 
-Logarithme naturel : log(valeur)
+Logarithme népérien : log(valeur)
 
 Racine carrée : sqrt(valeur)
 
