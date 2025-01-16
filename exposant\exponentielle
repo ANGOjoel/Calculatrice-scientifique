@@ -1,0 +1,59 @@
+#include <stdio.h>
+#include <math.h>
+
+void calculExponentielle() {
+    double x, resultat;
+
+    printf("\n=== Calcul de l'exponentielle (e^x) ===\n");
+    printf("Entrez une valeur pour x : ");
+    scanf("%lf", &x);
+
+    // Calcul de l'exponentielle
+    resultat = exp(x);
+    printf("e^%.2f = %.4f\n", x, resultat);
+}
+
+void calculExposant() {
+    double base, exposant, resultat;
+
+    printf("\n=== Calcul de la puissance (a^b) ===\n");
+    printf("Entrez la base (a) : ");
+    scanf("%lf", &base);
+
+    printf("Entrez l'exposant (b) : ");
+    scanf("%lf", &exposant);
+
+    // Calcul de la puissance
+    resultat = pow(base, exposant);
+    printf("%.2f^%.2f = %.4f\n", base, exposant, resultat);
+}
+
+int main() {
+    int choix;
+
+    printf("=== Menu Calculateur ===\n");
+    printf("1. Calculer l'exponentielle (e^x)\n");
+    printf("2. Calculer une puissance (a^b)\n");
+    printf("3. Quitter\n");
+
+    do {
+        printf("\nEntrez votre choix : ");
+        scanf("%d", &choix);
+
+        switch (choix) {
+            case 1:
+                calculExponentielle();
+                break;
+            case 2:
+                calculExposant();
+                break;
+            case 3:
+                printf("Merci d'avoir utilisé le programme. Au revoir !\n");
+                break;
+            default:
+                printf("Choix invalide. Veuillez réessayer.\n");
+        }
+    } while (choix != 3);
+
+    return 0;
+}
