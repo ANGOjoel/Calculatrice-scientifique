@@ -1,0 +1,27 @@
+#include <stdio.h>
+#include <math.h>
+
+int main() {
+    double nombre, log_naturel, log_base10;
+
+    // Demander à l'utilisateur d'entrer un nombre
+    printf("Entrez un nombre positif : ");
+    scanf("%lf", &nombre);
+
+    // Vérifier que le nombre est positif
+    if (nombre > 0) {
+        // Calculer le logarithme naturel (base e)
+        log_naturel = log(nombre);
+
+        // Calculer le logarithme en base 10
+        log_base10 = log10(nombre);
+
+        // Afficher les résultats
+        printf("Logarithme naturel de %.2f : %.4f\n", nombre, log_naturel);
+        printf("Logarithme en base 10 de %.2f : %.4f\n", nombre, log_base10);
+    } else {
+        printf("Erreur : le nombre doit être strictement positif.\n");
+    }
+
+    return 0;
+}
