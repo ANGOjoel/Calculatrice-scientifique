@@ -1,0 +1,29 @@
+#include <stdio.h>
+
+int main() {
+    double total, valeur, pourcentage;
+
+    printf("=== Calcul du pourcentage ===\n");
+
+    // Demander la valeur totale
+    printf("Entrez la valeur totale : ");
+    if (scanf("%lf", &total) != 1 || total <= 0) {
+        printf("Erreur : la valeur totale doit être un nombre positif.\n");
+        return 1;
+    }
+
+    // Demander la valeur partielle
+    printf("Entrez la valeur partielle : ");
+    if (scanf("%lf", &valeur) != 1 || valeur < 0) {
+        printf("Erreur : la valeur partielle doit être un nombre positif ou nul.\n");
+        return 1;
+    }
+
+    // Calcul du pourcentage
+    pourcentage = (valeur / total) * 100;
+
+    // Affichage du résultat
+    printf("Le pourcentage est : %.2f%%\n", pourcentage);
+
+    return 0;
+}
