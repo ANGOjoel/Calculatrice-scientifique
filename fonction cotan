@@ -1,0 +1,26 @@
+#include <stdio.h>
+#include <math.h>
+
+void calculerCotan(double angle) {
+    // Vérifier si la tangente est nulle
+    if (fmod(angle, M_PI) == 0) { // angle est un multiple de π
+        printf("Erreur : cotangente indéfinie pour un multiple de π.\n");
+    } else {
+        // Calculer la cotangente
+        double cotan = 1.0 / tan(angle);
+        printf("Cotangente de %.4f radians : %.4f\n", angle, cotan);
+    }
+}
+
+int main() {
+    double angle;
+
+    // Demander à l'utilisateur d'entrer un angle en radians
+    printf("Entrez un angle en radians : ");
+    scanf("%lf", &angle);
+
+    // Appeler la fonction pour calculer la cotangente
+    calculerCotan(angle);
+
+    return 0;
+}
