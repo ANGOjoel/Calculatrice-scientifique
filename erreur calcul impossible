@@ -1,0 +1,91 @@
+#include <stdio.h>
+#include <math.h>
+
+// Fonction pour effectuer des calculs de base avec gestion des erreurs
+void calculatrice() {
+    double num1, num2, resultat;
+    char operateur;
+
+    printf("=== Calculatrice avec gestion des erreurs ===\n");
+    printf("Entrez une opération (ex : 5 + 3, 10 / 2) :\n");
+    printf("Entrée : ");
+    if (scanf("%lf %c %lf", &num1, &operateur, &num2) == 3) {
+        switch (operateur) {
+            case '+':
+                resultat = num1 + num2;
+                printf("Résultat : %.2f + %.2f = %.2f\n", num1, num2, resultat);
+                break;
+            case '-':
+                resultat = num1 - num2;
+                printf("Résultat : %.2f - %.2f = %.2f\n", num1, num2, resultat);
+                break;
+            case '*':
+                resultat = num1 * num2;
+                printf("Résultat : %.2f * %.2f = %.2f\n", num1, num2, resultat);
+                break;
+            case '/':
+                if (num2 == 0) {
+                    printf("Erreur : division par zéro impossible.\n");
+                } else {
+                    resultat = num1 / num2;
+                    printf("Résultat : %.2f / %.2f = %.2f\n", num1, num2, resultat);
+                }
+                break;
+            case '^':
+                if (num1 < 0 && floor(num2) != num2) {
+                    printf("Erreur : puissance avec une base négative et un exposant non entier impossible.\n");
+                } else {
+                    resultat = pow(num1, num2);
+                    printf("Résultat : %.2f ^ %.2f = %.2f\n", num1, num2, resultat);
+                }
+                break;
+            default:
+                printf("Erreur : opérateur '%c' non valide.\n", operateur);
+        }
+    } else {
+        // Pour des opérations avec un seul argument (comme sqrt ou log)
+        char fonction[10];
+        double nombre;
+
+        // Réinitialiser le buffer
+        while (getchar() != '\n');
+
+        printf("Entrez une fonction mathématique avec un seul argument (ex : sqrt 16) :\n");
+        printf("Entrée : ");
+        if (scanf("%s %lf", fonction, &nombre) == 2) {
+            if (strcmp(fonction, "sqrt") == 0) {
+                if (nombre < 0) {
+                    printf("Erreur : racine carrée d'un nombre négatif impossible.\n");
+                } else {
+                    resultat = sqrt(nombre);
+                    printf("Résultat : sqrt(%.2f) = %.2f\n", nombre, resultat);
+                }
+            } else if (strcmp(fonction, "log") == 0) {
+                if (nombre <= 0) {
+                    printf("Erreur : logarithme d'un nombre non positif impossible.\n");
+                } else {
+                    resultat = log(nombre);
+                    printf("Résultat : log(%.2f) = %.2f\n", nombre, resultat);
+                }
+            } else {
+                printf("Erreur : fonction '%s' non reconnue.\n", fonction);
+            }
+        } else {
+            printf("Erreur : entrée invalide.\n");
+        }
+    }
+}
+
+int main() {
+    char choix;
+
+    do {
+        calculatrice();
+
+        printf("\nVoulez-vous effectuer un autre calcul ? (o/n) : ");
+        scanf(" %c", &choix);
+    } while (choix == 'o' || choix == 'O');
+
+    printf("Merci d'avoir utilisé la calculatrice !\n");
+    return 0;
+}
