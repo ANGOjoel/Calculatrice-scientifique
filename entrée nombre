@@ -1,0 +1,35 @@
+#include <stdio.h>
+
+int main() {
+    int n, i;
+
+    // Demander à l'utilisateur combien de nombres il veut entrer
+    printf("Combien de nombres voulez-vous entrer ? ");
+    scanf("%d", &n);
+
+    // Vérification de la validité de l'entrée
+    if (n <= 0) {
+        printf("Erreur : le nombre d'entrées doit être supérieur à zéro.\n");
+        return 1; // Terminer le programme avec un code d'erreur
+    }
+
+    double nombres[n]; // Tableau pour stocker les nombres
+
+    // Lire les nombres
+    printf("Entrez %d nombre(s) :\n", n);
+    for (i = 0; i < n; i++) {
+        printf("Nombre %d : ", i + 1);
+        if (scanf("%lf", &nombres[i]) != 1) { // Vérification de l'entrée
+            printf("Erreur : veuillez entrer un nombre valide.\n");
+            return 1; // Terminer le programme en cas d'erreur
+        }
+    }
+
+    // Afficher les nombres saisis
+    printf("\nVous avez saisi les nombres suivants :\n");
+    for (i = 0; i < n; i++) {
+        printf("Nombre %d : %.2f\n", i + 1, nombres[i]);
+    }
+
+    return 0;
+}
