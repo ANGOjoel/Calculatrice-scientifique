@@ -12,7 +12,7 @@ Addition (+), Soustraction (-), Multiplication (*), Division (/).
 
 Trigonométrie : sin(), cos(), tan() (les angles sont en degrés).
 
-Logarithme naturel : log().
+Logarithme népérien : log().
 
 Racine carrée : sqrt().
 
