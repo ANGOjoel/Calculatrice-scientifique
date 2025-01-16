@@ -1,0 +1,47 @@
+#include <stdio.h>
+
+void afficherCalcul(int a, char operateur, int b) {
+    int resultat;
+
+    // Effectuer le calcul en fonction de l'opérateur
+    switch (operateur) {
+        case '+':
+            resultat = a + b;
+            break;
+        case '-':
+            resultat = a - b;
+            break;
+        case '*':
+            resultat = a * b;
+            break;
+        case '/':
+            if (b != 0) {
+                resultat = a / b;
+            } else {
+                printf("Erreur : division par zéro.\n");
+                return;
+            }
+            break;
+        default:
+            printf("Erreur : opérateur non pris en charge.\n");
+            return;
+    }
+
+    // Afficher le calcul et le résultat
+    printf("%d %c %d = %d\n", a, operateur, b, resultat);
+}
+
+int main() {
+    int a, b;
+    char operateur;
+
+    // Demander à l'utilisateur d'entrer le calcul
+    printf("Entrez un calcul sous la forme : nombre1 opérateur nombre2 (ex : 5 + 3)\n");
+    printf("Entrée : ");
+    scanf("%d %c %d", &a, &operateur, &b);
+
+    // Appeler la fonction pour afficher le calcul
+    afficherCalcul(a, operateur, b);
+
+    return 0;
+}
