@@ -1,0 +1,78 @@
+#include <stdio.h>
+#include <math.h>
+#include <stdlib.h>
+#include <ctype.h>
+
+// Fonction pour effectuer le calcul
+void afficherResultat(double a, char operateur, double b) {
+    double resultat;
+    int erreur = 0;
+
+    // Calcul en fonction de l'opérateur
+    switch (operateur) {
+        case '+':
+            resultat = a + b;
+            break;
+        case '-':
+            resultat = a - b;
+            break;
+        case '*':
+            resultat = a * b;
+            break;
+        case '/':
+            if (b != 0) {
+                resultat = a / b;
+            } else {
+                printf("Erreur : division par zéro.\n");
+                erreur = 1;
+            }
+            break;
+        case '^':
+            resultat = pow(a, b);
+            break;
+        default:
+            printf("Erreur : opérateur non valide ('%c').\n", operateur);
+            erreur = 1;
+    }
+
+    // Affichage du résultat si aucune erreur
+    if (!erreur) {
+        printf("Résultat : %.2f %c %.2f = %.2f\n", a, operateur, b, resultat);
+    }
+}
+
+int main() {
+    double a, b;
+    char operateur;
+    int lectureValide;
+
+    printf("Calculatrice simple\n");
+    printf("Entrez une opération sous la forme : nombre1 opérateur nombre2 (ex : 5 + 3)\n");
+
+    while (1) {
+        printf("\nEntrée : ");
+        lectureValide = scanf("%lf %c %lf", &a, &operateur, &b);
+
+        // Vérifier si l'entrée est correcte
+        if (lectureValide != 3 || !isfinite(a) || !isfinite(b)) {
+            printf("Erreur : entrée invalide. Veuillez entrer une opération valide.\n");
+            // Vider le buffer pour éviter une boucle infinie
+            while (getchar() != '\n');
+            continue;
+        }
+
+        // Appeler la fonction pour afficher le résultat
+        afficherResultat(a, operateur, b);
+
+        // Demander si l'utilisateur veut continuer
+        char choix;
+        printf("Voulez-vous effectuer un autre calcul ? (o/n) : ");
+        scanf(" %c", &choix);
+        if (tolower(choix) != 'o') {
+            break;
+        }
+    }
+
+    printf("Merci d'avoir utilisé la calculatrice !\n");
+    return 0;
+}
