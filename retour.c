@@ -10,7 +10,7 @@ double evaluerExpression(char *calcul, int *index);
 void expressionvalide(char *entre)
 {
     int i = 0;
-    char *functions[] = {"sin", "cos", "tan", "sqrt", "log", "pow"};
+    char functions[6] = {"sin", "cos", "tan", "sqrt", "log", "pow"};
     int num_functions = 6; // Nombre de fonctions mathématiques
 
     // Vérification de la validité de l'expression
@@ -283,7 +283,7 @@ double evaluerExpression(char *calcul, int *index)
 // Fonction principale
 int main() 
 {
-    char calcul[100];
+    char *calcul = (char *)malloc(1000 * sizeof(char));
     printf("Avant tout calcul vous devez tenir compte de certaines informaions\nPour pouvoir utiliser la fonction sinus vous devez entrer sin()\nPour pouvoir utiliser la fonction cossinus vous devez entrer cos()\nPour pouvoir utiliser la fonction tangente vous devez entrer tan()\nPour pouvoir utiliser la fonction logarithme neperien vous devez entrer log()\nPour pouvoir utiliser la fonction racine carree vous devez entrer sqrt()\nPour pouvoir utiliser la fonction puissance vous devez entrer pow(base,exposant)\nPour les fonctions trigonometriques,les angles sont deja consideres en degre,entrer juste la valeur de l'angle .\nNB:L'utlisation des parentheses est uniquement pour les fonctions trigonometriques et mathematiques\nEntrer votre expression : ");
     fgets(calcul, sizeof(calcul), stdin);
     printf("Expression lue depuis l'entree : %s\n", calcul);
@@ -292,6 +292,6 @@ int main()
     int index = 0;
     double resultat = evaluerExpression(calcul, &index);
     printf("Le resultat de l'expression est : %.2f\n", resultat);
-    
+    free(calcul);
     return 0;
 }
