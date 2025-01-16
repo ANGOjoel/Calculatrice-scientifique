@@ -10,7 +10,7 @@ double evaluerExpression(char *calcul, int *index);
 void expressionvalide(char *entre)
 {
     int i = 0;
-    char functions[6] = {"sin", "cos", "tan", "sqrt", "log", "pow"};
+    char *functions[] = {"sin", "cos", "tan", "sqrt", "log", "pow"};
     int num_functions = 6; // Nombre de fonctions mathématiques
 
     // Vérification de la validité de l'expression
