@@ -1,0 +1,74 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+#include<ctype.h>
+#define M_PI 3.14159265358979323846
+double fonction(char *expression, int *index, char *nomfonction) 
+{
+    int i = *index;
+    char tabfunction[100];
+    int s = 0;
+
+    while (expression[i] != '(' && expression[i] != '\0') 
+    {
+        i++;
+    }
+
+    if (expression[i] == '(') 
+    {
+        i++;  // Passer le '('
+        while (expression[i] != ')' && expression[i] != '\0') 
+        {
+            tabfunction[s] = expression[i];
+            s++;
+            i++;
+        }
+
+        tabfunction[s] = '\0'; // Terminer la chaîne
+        double nombrefonction = atof(tabfunction);
+        *index = i; // Mettre à jour l'index après le calcul
+
+        if (strcmp(nomfonction, "sin") == 0) 
+        {
+            return sin(nombrefonction * M_PI / 180);  // sin() utilise des radians
+        } 
+        else if (strcmp(nomfonction, "cos") == 0) 
+        {
+            return cos(nombrefonction * M_PI / 180);  // cos() utilise des radians
+        } 
+        else if (strcmp(nomfonction, "tan") == 0) 
+        {
+            return tan(nombrefonction * M_PI / 180);  // tan() utilise des radians
+        } 
+        else if (strcmp(nomfonction, "sqrt") == 0) 
+        {
+            return sqrt(nombrefonction); // Fonction racine carrée
+        } 
+        else if (strcmp(nomfonction, "log") == 0) 
+        {
+            return log(nombrefonction); // Fonction logarithme
+        }
+        else if (strcmp(nomfonction, "pow") == 0) 
+        {
+            double base, exposant;
+            int j = 0;
+
+            // Extraire la base (avant la virgule)
+            while (tabfunction[j] != ',' && tabfunction[j] != '\0') 
+            {
+                j++;
+            }
+            tabfunction[j] = '\0';
+            base = atof(tabfunction); // Convertir la base
+
+            // Extraire l'exposant (après la virgule)
+            exposant = atof(tabfunction + j + 1); // La partie après la virgule
+
+            *index = i; // Mettre à jour l'index après le calcul
+
+            return pow(base, exposant); // Calculer la puissance
+        }
+    }
+
+    return 0;
+}
